@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:500,400,300,200' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="styles/main.css">
+  <title>Calculator</title>
+</head>
+<body>
+  <header>
+    Calculator
+  </header>
+  <section class="main">
+    <input type="text" placeholder="Enter 1st argument" id="operand1" oninput="go(this)"></input>
+    <input type="text" placeholder="Enter operator" id="operator" oninput="go(this)"></input>
+    <input type="text" placeholder="Enter 2nd argument" id="operand2" oninput="go(this)"></input>
+    <input type="text" placeholder="Result shows here" id="result" disabled></input>
+    <section id="demo"></section>
+  </section>
+  <footer></footer>
+  <script src="lib/calculator.js"></script>
+  <script src="lib/input_checker.js"></script>
+  <script src="lib/dom_interface.js"></script>
+  <script src="lib/main.js"></script>
+</body>
+</html>
