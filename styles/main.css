@@ -166,6 +166,12 @@ Footer
   border-top: 1px solid #BFBFBF;
 }
 
+@media only screen and (max-height: 639px) {
+  .footer {
+    position: relative;
+  }
+}
+
 @media only screen and (max-width: 419px) {
   input {
     float: none;
