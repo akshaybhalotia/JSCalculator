@@ -4,15 +4,15 @@ describe("Go method checks the field from which it was triggered and", function(
     spyOn(window, "check");
   });
 
-  it("triggers check if the value of the field is not empty", function() {
-    jasmine.getFixtures().set('<input type="text" id="operand1" value="6"></input><input type="text" id="operand2" value="2"></input><input type="text" id="operator" value="+"></input><input type="text" id="result" value="" disabled></input>');
+  it("triggers check if the field is not empty", function() {
+    jasmine.getFixtures().set('<input id="operand1" value="6"></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="" disabled></input>');
     go(document.getElementById('operand1'));
     expect(window.check).toHaveBeenCalledWith('operand1');
   });
 
-  describe("if field is empty", function() {
+  describe("if the field is empty", function() {
     beforeEach(function() {
-      jasmine.getFixtures().set('<input type="text" id="operand1" value=""></input><input type="text" id="operand2" value="2"></input><input type="text" id="operator" value="+"></input><input type="text" id="result" value="8" disabled></input>');
+      jasmine.getFixtures().set('<input id="operand1" value=""></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="8" disabled></input>');
       go(document.getElementById('operand1'));
     });
 
@@ -23,6 +23,10 @@ describe("Go method checks the field from which it was triggered and", function(
     it("empties the result field", function() {
       expect(document.getElementById('result').value).toBeFalsy();
     });
+
+    it("changes the border of the field to default border", function() {
+      expect(document.getElementById('operand1').style.cssText).toBe('border: 1px solid rgb(221, 221, 221);');
+    });
   });
 });
 
@@ -31,7 +35,7 @@ describe("Check method checks the fields and if the recently changed field", fun
   describe("makes all the fields valid,", function() {
 
     beforeEach(function() {
-      jasmine.getFixtures().set('<input type="text" id="operand1" value="6"></input><input type="text" id="operand2" value="2"></input><input type="text" id="operator" value="+"></input><input type="text" id="result" value="" disabled></input>');
+      jasmine.getFixtures().set('<input id="operand1" value="6"></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="" disabled></input>');
       spyOn(calc, "calculate").and.callThrough();
       check('operand1');
     });
@@ -47,9 +51,14 @@ describe("Check method checks the fields and if the recently changed field", fun
 
   describe("makes any of the fields invalid,", function() {
     beforeEach(function() {
-      jasmine.getFixtures().set('<input type="text" id="operand1" value=""></input><input type="text" id="operand2" value="2"></input><input type="text" id="operator" value="+"></input><input type="text" id="result" value="8" disabled></input>');
-      spyOn(dom_interface, "checkFields").and.returnValue(false);
+      jasmine.getFixtures().set('<input id="operand1" value=""></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="8" disabled></input>');
+      spyOn(dom_interface, "checkFields").and.returnValues(false, true, true);
+      spyOn(calc, "calculate");
       check('operand1');
+    });
+
+    it("does not call the calculate method", function() {
+      expect(calc.calculate).not.toHaveBeenCalled();
     });
 
     it("empties the result field", function() {
