@@ -77,9 +77,10 @@ Custom styles
 */
 
 body {
-  background: #fff;
+  background-color: #AAA;
   color: #202020;
-  font: 400 16px/18px 'Roboto', sans-serif;
+  text-align: center;
+  font: 400 20px/24px 'Roboto', sans-serif;
 }
 h1 {
   font: 200 48px/54px 'Roboto', sans-serif;
@@ -89,4 +90,91 @@ h2 {
 }
 h3 {
   font: 300 28px/32px 'Roboto', sans-serif;
+}
+input {
+  display: inline;
+  border: 1px solid #DDD;
+  float: right;
+  text-align: right;
+  border-radius: 6px;
+  font: 400 20px/24px 'Roboto', sans-serif;
+  margin: .8em .4em;
+}
+
+/*
+========================================
+Header
+========================================
+*/
+
+.header {
+  width: 100%;
+  margin: 32px auto;
+  color: #D22341;
+}
+
+/*
+========================================
+Main
+========================================
+*/
+
+.main {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 21em;
+}
+.operand,
+.result {
+  width: 12em;
+}
+.operator {
+  width: 7em;
+}
+.result,
+#operand1 {
+  display: block;
+}
+.result {
+  color: #202020;
+  background-color: #AAA;
+  border: none;
+  border-top: 1px solid black;
+  border-radius: 0;
+}
+
+/*
+========================================
+Footer
+========================================
+*/
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding-top: 1px;
+}
+.copyright-info {
+  width: 100%;
+  min-width: 320px;
+  max-width: 960px;
+  margin: 10px auto 0;
+  padding: 20px;
+  text-align: left;
+  border-top: 1px solid #BFBFBF;
+}
+
+@media only screen and (max-width: 419px) {
+  input {
+    float: none;
+  }
+  .result,
+  #operand1 {
+    display: inline;
+  }
+  .main {
+    width: 100%;
+  }
 }

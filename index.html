@@ -8,17 +8,27 @@
   <title>Calculator</title>
 </head>
 <body>
-  <header>
-    Calculator
+  <header class="header">
+    <h1>Simple Dynamic Calculator</h1>
   </header>
   <section class="main">
-    <input type="text" placeholder="Enter 1st argument" id="operand1" oninput="go(this)"></input>
-    <input type="text" placeholder="Enter operator" id="operator" oninput="go(this)"></input>
-    <input type="text" placeholder="Enter 2nd argument" id="operand2" oninput="go(this)"></input>
-    <input type="text" placeholder="Result shows here" id="result" disabled></input>
-    <section id="demo"></section>
+    <h3>Incorrect input highlights the field with a <span style="color: #B01732;">red</span> border.</h3>
+    <div class="group">
+      <input type="text" class="operand" placeholder="Enter 1st argument" id="operand1" oninput="go(this)" tabindex="1"></input>
+    </div>
+    <div class="group">
+      <input type="text" class="operand" placeholder="Enter 2nd argument" id="operand2" oninput="go(this)" tabindex="3"></input>
+      <input type="text" class="operator" placeholder="Enter operator" id="operator" oninput="go(this)" tabindex="2"></input>
+    </div>
+    <div class="group">
+      <input type="text" class="result" placeholder="Result shows here" id="result" disabled></input>
+    </div>
   </section>
-  <footer></footer>
+  <footer class="footer">
+    <section class="copyright-info">
+      <p>©2015, Multunus Software Pvt Ltd</p>
+    </section>
+  </footer>
   <script src="lib/calculator.js"></script>
   <script src="lib/input_checker.js"></script>
   <script src="lib/dom_interface.js"></script>
