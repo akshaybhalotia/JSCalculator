@@ -6,11 +6,8 @@ engines:
   eslint:
     enabled: true
   fixme:
-    enabled: true
   nodesecurity:
-    enabled: true
   radon:
-    enabled: true
 ratings:
    paths:
    - "lib/*"
