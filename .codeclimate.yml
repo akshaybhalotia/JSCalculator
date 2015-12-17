@@ -1,11 +1,6 @@
 engines:
   csslint:
     enabled: true
-  duplication:
-    enabled: true
-      config:
-        languages:
-        - javascript
   eslint:
     enabled: true
   fixme:
@@ -14,6 +9,11 @@ engines:
     enabled: true
   radon:
     enabled: true
+  duplication:
+    enabled: true
+      config:
+        languages:
+        - javascript
 ratings:
    paths:
    - "lib/*"
