@@ -9,11 +9,6 @@ engines:
     enabled: true
   radon:
     enabled: true
-  duplication:
-    enabled: true
-      config:
-        languages:
-        - javascript
 ratings:
    paths:
    - "lib/*"
