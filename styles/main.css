@@ -93,7 +93,6 @@ h3 {
 }
 input {
   display: inline;
-  border: 1px solid #DDD;
   float: right;
   text-align: right;
   border-radius: 6px;
@@ -143,6 +142,12 @@ Main
   border-top: 1px solid black;
   border-radius: 0;
 }
+.normal {
+  border: 1px solid #DDD;
+}
+.highlighted {
+  border: 2px solid #B01732;
+}
 
 /*
 ========================================
@@ -176,11 +181,14 @@ Footer
   input {
     float: none;
   }
+  .main {
+    width: 100%;
+  }
+  .operator {
+    width: 12em;
+  }
   .result,
   #operand1 {
     display: inline;
-  }
-  .main {
-    width: 100%;
   }
 }

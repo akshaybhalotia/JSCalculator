@@ -15,8 +15,17 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'lib/*.js',
-      'spec/*[sS]pec.js'
+    'lib/calculator.js',
+    'lib/validator.js',
+    'lib/dom_editor.js',
+    'lib/driver.js',
+    {
+      pattern: 'spec/*.html',
+      watched: true,
+      served: true,
+      included: false
+    },
+    'spec/*[sS]pec.js'
     ],
 
 

@@ -31,6 +31,6 @@ describe("A calculator", function() {
   });
 
   it("gives error on incorrect operation", function() {
-    expect( function() { calc.calculate(4, 2, 'log'); } ).toThrow();
+    expect(calc.calculate(4, 2, 'invalid_input')).toBe('Invalid operator');
   });
 });
