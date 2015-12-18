@@ -2,7 +2,7 @@ describe("A validator", function() {
 
   var validator;
   beforeEach(function() {
-    validator = Validator();
+    validator = new Validator();
   });
 
   describe("validates if operand is a number, and", function() {

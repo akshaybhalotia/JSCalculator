@@ -1,68 +1,199 @@
-describe("Go method checks the field from which it was triggered and", function() {
+describe("Driver script", function() {
+
+  describe("#isEmpty", function() {
+    it("checks if the value is empty or nil", function() {
+      expect(isEmpty('')).toBeTruthy;
+      expect(isEmpty('a')).toBeFalsy;
+    });
+  });
+
+  describe("#deleteResult", function() {
+    it("deletes the value of result", function() {
+      jasmine.getFixtures().fixturesPath = 'base/spec/';
+      loadFixtures('fixtures.html');
+      result = document.getElementById('result');
+      result.value = 10;
+
+      deleteResult();
+
+      expect(result.value).toBe('');
+    });
+  });
+
+  describe("#highlightToggler", function() {
+    it("highlight toggler highlights the fields it receives and removes the highlight from all other fields", function() {
+      jasmine.getFixtures().fixturesPath = 'base/spec/';
+      loadFixtures('fixtures.html');
+      document.getElementById('operand2').classList.add('highlighted');
+
+      highlightToggler(['operand1']);
+
+      expect(document.getElementById('operand1').classList.contains('highlighted')).toBe(true);
+      expect(document.getElementById('operand2').classList.contains('highlighted')).toBe(false);
+      expect(document.getElementById('operator').classList.contains('highlighted')).toBe(false);
+    });
+  });
+
+  describe("instantiates the", function() {
+
+    it("calculator", function() {
+      expect(calculator).toBeDefined();
+    });
+
+    it("validator", function() {
+      expect(validator).toBeDefined();
+    });
+
+    it("dom_editor", function() {
+      expect(dom_editor).toBeDefined();
+    });
+
+    it("fieldList", function() {
+      expect(fieldList).toEqual(['operand1', 'operand2', 'operator']);
+    });
+  });
+
+  describe("#nonEmptyFields", function() {
+    beforeEach(function() {
+      jasmine.getFixtures().fixturesPath = 'base/spec/';
+      loadFixtures('fixtures.html');
+    });
+
+    it("gives empty object if all fields are empty", function() {
+      expect(nonEmptyFields()).toEqual({});
+    });
+
+    it("gives an object with all non-empty fields and their values", function() {
+      document.getElementById('operand1').value = 'some_value';
+      document.getElementById('operator').value = 'some_other_value';
+
+      expect(nonEmptyFields()).toEqual({'operand1': 'some_value', 'operator': 'some_other_value'});
+    });
+  });
+
+  describe("#validate", function() {
+
+    beforeEach(function() {
+      jasmine.getFixtures().fixturesPath = 'base/spec/';
+      loadFixtures('fixtures.html');
+    });
+
+    it("does not call validator if all fields are empty", function() {
+      spyOn(window, 'nonEmptyFields').and.returnValue({});
+      spyOn(validator, 'validateFields');
+
+      validate();
+
+      expect(validator.validateFields).not.toHaveBeenCalled();
+    });
+
+    it("does not delete result if number of non-empty fields is 3", function() {
+      var some_data = {'operand1': 'some_value', 'operand2': 'some_value', 'operator': 'some_value'};
+      spyOn(window, 'nonEmptyFields').and.returnValue(some_data);
+      spyOn(validator, 'validateFields').and.returnValue(Object.keys(some_data));
+      spyOn(window, 'deleteResult');
+
+      validate();
+
+      expect(deleteResult).not.toHaveBeenCalled();
+    });
+
+    describe("if any field has values", function() {
+
+      var some_data;
+      beforeEach(function() {
+        some_data = {'operand1': 'some_value'};
+        spyOn(window, 'nonEmptyFields').and.returnValue(some_data);
+        spyOn(validator, 'validateFields').and.returnValue(Object.keys(some_data));
+      });
+
+      it("calls validator", function() {
+        validate();
+
+        expect(validator.validateFields).toHaveBeenCalled();
+        expect(validator.validateFields).toHaveBeenCalledWith(some_data);
+      });
+
+      it("deletes result if number of non-empty fields is less than 3", function() {
+        spyOn(window, 'deleteResult');
+
+        validate();
+
+        expect(deleteResult).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe("#calculate", function() {
 
   beforeEach(function() {
-    spyOn(window, "check");
+    jasmine.getFixtures().fixturesPath = 'base/spec/';
+    loadFixtures('fixtures.html');
+    spyOn(calculator, 'execute').and.returnValue(5.63);
+
+    calculate();
   });
 
-  it("triggers check if the field is not empty", function() {
-    jasmine.getFixtures().set('<input id="operand1" value="6"></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="" disabled></input>');
-    go(document.getElementById('operand1'));
-    expect(window.check).toHaveBeenCalledWith('operand1');
+  it("executes calculation", function() {
+    expect(calculator.execute).toHaveBeenCalled();
   });
 
-  describe("if the field is empty", function() {
-    beforeEach(function() {
-      jasmine.getFixtures().set('<input id="operand1" value=""></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="8" disabled></input>');
-      go(document.getElementById('operand1'));
-    });
-
-    it("does not trigger check", function() {
-      expect(window.check).not.toHaveBeenCalled();
-    });
-
-    it("empties the result field", function() {
-      expect(document.getElementById('result').value).toBeFalsy();
-    });
-
-    it("changes the border of the field to default border", function() {
-      expect(document.getElementById('operand1').style.cssText).toBe('border: 1px solid rgb(221, 221, 221);');
-    });
+  it("sets the value of result", function() {
+    expect(document.getElementById('result').value).toBe('5.63');
   });
-});
-
-describe("Check method checks the fields and if the recently changed field", function() {
-
-  describe("makes all the fields valid,", function() {
-
-    beforeEach(function() {
-      jasmine.getFixtures().set('<input id="operand1" value="6"></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="" disabled></input>');
-      spyOn(calc, "calculate").and.callThrough();
-      check('operand1');
-    });
-
-    it("calls the calculate method", function() {
-      expect(calc.calculate).toHaveBeenCalledWith(6, 2, "+");
-    });
-
-    it("sets the result field to the result", function() {
-      expect(document.getElementById('result').value).toBe('8');
-    });
   });
 
-  describe("makes any of the fields invalid,", function() {
-    beforeEach(function() {
-      jasmine.getFixtures().set('<input id="operand1" value=""></input><input id="operand2" value="2"></input><input id="operator" value="+"></input><input id="result" value="8" disabled></input>');
-      spyOn(dom_interface, "checkFields").and.returnValues(false, true, true);
-      spyOn(calc, "calculate");
-      check('operand1');
+  describe("#trigger", function() {
+
+  beforeEach(function() {
+    jasmine.getFixtures().fixturesPath = 'base/spec/';
+    loadFixtures('fixtures.html');
+    spyOn(window, 'calculate');
+    spyOn(window, 'deleteResult');
+    spyOn(window, 'highlightToggler');
+  });
+
+  it("gets list of invalid fields", function() {
+    spyOn(window, 'validate');
+
+    trigger();
+
+    expect(validate).toHaveBeenCalled();
+  });
+
+  it("does nothing if the list is undefined", function() {
+    spyOn(window, 'validate').and.returnValue(undefined);
+
+    trigger();
+
+    expect(calculate).not.toHaveBeenCalled();
+    expect(deleteResult).not.toHaveBeenCalled();
+    expect(highlightToggler).not.toHaveBeenCalled();
+  });
+
+  describe("if the list is defined", function() {
+    it("calls highlight toggler", function() {
+      spyOn(window, 'validate').and.returnValue([]);
+
+      trigger();
+
+      expect(highlightToggler).toHaveBeenCalled();
     });
 
-    it("does not call the calculate method", function() {
-      expect(calc.calculate).not.toHaveBeenCalled();
-    });
+    it("calls calculate if the list is empty", function() {
+      spyOn(window, 'validate').and.returnValue([]);
 
-    it("empties the result field", function() {
-      expect(document.getElementById('result').value).toBeFalsy();
+      trigger();
+
+      expect(calculate).toHaveBeenCalled();
     });
+    it("deletes result if the list is not empty", function() {
+      spyOn(window, 'validate').and.returnValue(['some_value']);
+
+      trigger();
+
+      expect(deleteResult).toHaveBeenCalled();
+    });
+  });
   });
 });
