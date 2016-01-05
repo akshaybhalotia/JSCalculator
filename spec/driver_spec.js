@@ -71,6 +71,24 @@ describe("Driver script", function() {
     });
   });
 
+  describe("#emptyFields", function() {
+    beforeEach(function() {
+      jasmine.getFixtures().fixturesPath = 'base/spec/';
+      loadFixtures('fixtures.html');
+    });
+
+    it("gives empty object if all fields are empty", function() {
+      expect(emptyFields()).toEqual(fieldList);
+    });
+
+    it("gives an object with all non-empty fields and their values", function() {
+      document.getElementById('operand1').value = 'some_value';
+      document.getElementById('operator').value = 'some_other_value';
+
+      expect(emptyFields()).toEqual(['operand2']);
+    });
+  });
+
   describe("#validate", function() {
 
     beforeEach(function() {
@@ -161,8 +179,17 @@ describe("Driver script", function() {
     expect(validate).toHaveBeenCalled();
   });
 
-  it("does nothing if the list is undefined", function() {
+  it("gets list of empty fields", function() {
+    spyOn(window, 'emptyFields');
+
+    trigger();
+
+    expect(emptyFields).toHaveBeenCalled();
+  });
+
+  it("does nothing if the list of invalid fields is undefined", function() {
     spyOn(window, 'validate').and.returnValue(undefined);
+    spyOn(window, 'emptyFields').and.returnValue([]);
 
     trigger();
 
@@ -171,7 +198,18 @@ describe("Driver script", function() {
     expect(highlightToggler).not.toHaveBeenCalled();
   });
 
-  describe("if the list is defined", function() {
+  it("does nothing if the list of empty fields is undefined", function() {
+    spyOn(window, 'validate').and.returnValue([]);
+    spyOn(window, 'emptyFields').and.returnValue(undefined);
+
+    trigger();
+
+    expect(calculate).not.toHaveBeenCalled();
+    expect(deleteResult).not.toHaveBeenCalled();
+    expect(highlightToggler).not.toHaveBeenCalled();
+  });
+
+  describe("if the list of invalid fields and the list of empty fields is defined", function() {
     it("calls highlight toggler", function() {
       spyOn(window, 'validate').and.returnValue([]);
 
@@ -180,14 +218,15 @@ describe("Driver script", function() {
       expect(highlightToggler).toHaveBeenCalled();
     });
 
-    it("calls calculate if the list is empty", function() {
+    it("calls calculate if both the lists are empty", function() {
       spyOn(window, 'validate').and.returnValue([]);
+      spyOn(window, 'emptyFields').and.returnValue([]);
 
       trigger();
 
       expect(calculate).toHaveBeenCalled();
     });
-    it("deletes result if the list is not empty", function() {
+    it("deletes result if any of the lists is not empty", function() {
       spyOn(window, 'validate').and.returnValue(['some_value']);
 
       trigger();

@@ -55,7 +55,7 @@ describe("A validator", function() {
     });
 
     it("returns an array of invalid fields", function() {
-      sample_input.operand2 = 'a';
+      sample_input.operand2 = '';
 
       expect(validator.validateFields(sample_input)).toEqual(['operand2']);
     });
